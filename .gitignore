@@ -2,4 +2,4 @@
 /node_modules
 
 #.env, should be omitted, left for this learning project
-.env
+# .env
