@@ -1,7 +1,13 @@
-var express = require('express');
+var express = require("express");
+var tokenVerfier = require("../controllers/tokenController");
 var router = express.Router();
 
-const vacationsController = require('../controllers/vacationsController');
+const vacationsController = require("../controllers/vacationsController");
 
+//get all vacations
+router.get("/", tokenVerfier.verifyToken, vacationsController.getAllVacations);
+
+//insert new vacation
+router.post("/", tokenVerfier.verifyToken, vacationsController.insertVacation);
 
 module.exports = router;
