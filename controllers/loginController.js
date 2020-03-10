@@ -44,7 +44,7 @@ exports.verifyUser = (req, res) => {
 };
 
 exports.signUp = (req, res) => {
-  let signUpInfo = req.body;
+  let signUpInfo = req.body.oUser;
   //check if anything send
   if (!signUpInfo.user_name) {
     res.end("nothing sent");
@@ -58,7 +58,7 @@ exports.signUp = (req, res) => {
         [signUpInfo.user_name],
         function(err, qResult) {
           //if username DOES exist
-          if (qResult.length > 1) {
+          if (qResult.length > 0) {
             res.end("user name taken");
             return;
           } else {

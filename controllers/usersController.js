@@ -17,8 +17,8 @@ exports.getAllUsers = (req, res) => {
 };
 
 exports.insertUser = (req, res) => {
-  let oUser = req.body;
-  console.log(oUser);
+  let oUser = req.body.oUser;
+  //console.log(oUser);
   try {
     pool.getConnection(function(err, connection) {
       // don't forget to check error
