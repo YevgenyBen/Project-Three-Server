@@ -5,9 +5,9 @@ var tokenVerfier = require("../controllers/tokenController");
 const usersController = require("../controllers/usersController");
 
 //get all users
-router.get("/", tokenVerfier.verifyToken, usersController.getAllUsers);
+router.get("/", usersController.getAllUsers);
 
 //insert new user
-router.post("/", tokenVerfier.verifyToken, usersController.insertUser);
+router.post("/", usersController.insertUser);
 
 module.exports = router;

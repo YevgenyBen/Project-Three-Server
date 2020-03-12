@@ -23,43 +23,62 @@ exports.verifyUser = (req, res) => {
         function(err, qResult) {
           //if user name DOES NOT exist
           if (qResult.length < 1) {
-            res.end("no such username");
+            res.json("no such username");
             return;
           }
           if (qResult[0].password == loginInfo.password) {
             // res.send(qResult);
-            jwt.sign(loginInfo, "secretkey", (err, token) => {
-              res.send({ token });
-            });
+            var token = jwt.sign(loginInfo, "secretkey");
+            // jwt.sign(loginInfo, "secretkey", (err, token) => {
+            //   res.send({ token });
+            // });
           } else {
             // res.send(qResult);
-            res.send("Bad user name or password");
+            res.json("Bad user name or password");
           }
         }
       );
     });
   } catch (err) {
-    res.send(err);
+    res.json(err);
   }
 };
 
 exports.signUp = (req, res) => {
+  let oResponse = {
+    result: "failure",
+    reason: "",
+    payload: "",
+    token: ""
+  };
+
   let signUpInfo = req.body.oUser;
   //check if anything send
   if (!signUpInfo.user_name) {
-    res.end("nothing sent");
+    oResponse.reason = "nothing sent";
+    res.json(oResponse);
     return;
   }
   try {
     pool.getConnection(function(err, connection) {
-      // don't forget to check error
+      if (err) {
+        oResponse.reason = err;
+        res.json(oResponse);
+        return;
+      }
       connection.query(
         "SELECT * FROM users WHERE user_name=?",
         [signUpInfo.user_name],
         function(err, qResult) {
+          if (err) {
+            oResponse.reason = err;
+            res.json(oResponse);
+            return;
+          }
           //if username DOES exist
           if (qResult.length > 0) {
-            res.end("user name taken");
+            oResponse.reason = "user name taken";
+            res.json(oResponse);
             return;
           } else {
             usersController.insertUser(req, res);
@@ -68,6 +87,6 @@ exports.signUp = (req, res) => {
       );
     });
   } catch (err) {
-    res.send(err);
+    res.json(err);
   }
 };
