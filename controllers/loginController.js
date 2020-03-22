@@ -8,10 +8,17 @@ const usersController = require("../controllers/usersController");
  */
 
 exports.verifyUser = (req, res) => {
-  let loginInfo = req.body;
+  let oResponse = {
+    result: "failure",
+    reason: "",
+    payload: "",
+    token: ""
+  };
+  let loginInfo = req.body.oLoginUser;
   //check if anything send
-  if (!loginInfo.user_name) {
-    res.end("nothing sent");
+  if (!loginInfo.UserName) {
+    oResponse.reason="nothing sent"
+    res.json(oResponse);
     return;
   }
   try {
@@ -19,22 +26,23 @@ exports.verifyUser = (req, res) => {
       // don't forget to check error
       connection.query(
         "SELECT * FROM users WHERE user_name=?",
-        [loginInfo.user_name],
+        [loginInfo.UserName],
         function(err, qResult) {
           //if user name DOES NOT exist
           if (qResult.length < 1) {
-            res.json("no such username");
+            oResponse.reason="Bad user name or password"
+            res.json(oResponse);
             return;
           }
-          if (qResult[0].password == loginInfo.password) {
-            // res.send(qResult);
+          if (qResult[0].password == loginInfo.Password) {
             var token = jwt.sign(loginInfo, "secretkey");
-            // jwt.sign(loginInfo, "secretkey", (err, token) => {
-            //   res.send({ token });
-            // });
+            oResponse.result="success"
+            oResponse.token=token
+            res.json(oResponse);
           } else {
             // res.send(qResult);
-            res.json("Bad user name or password");
+            oResponse.reason="Bad user name or password"
+            res.json(oResponse);
           }
         }
       );
