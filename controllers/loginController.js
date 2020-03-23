@@ -7,6 +7,8 @@ const usersController = require("../controllers/usersController");
  * Will need toclean up request and response
  */
 
+
+//login
 exports.verifyUser = (req, res) => {
   let oResponse = {
     result: "failure",
@@ -17,13 +19,13 @@ exports.verifyUser = (req, res) => {
   let loginInfo = req.body.oLoginUser;
   //check if anything send
   if (!loginInfo.UserName) {
-    oResponse.reason="nothing sent"
+    oResponse.reason = "nothing sent"
     res.json(oResponse);
     return;
   }
   try {
-    pool.getConnection(function(err, connection) {
-      if (err){
+    pool.getConnection(function (err, connection) {
+      if (err) {
         res.json(err);
         return;
       }
@@ -31,21 +33,21 @@ exports.verifyUser = (req, res) => {
       connection.query(
         "SELECT * FROM users WHERE user_name=?",
         [loginInfo.UserName],
-        function(err, qResult) {
+        function (err, qResult) {
           //if user name DOES NOT exist
           if (qResult.length < 1) {
-            oResponse.reason="Bad user name or password"
+            oResponse.reason = "Bad user name or password"
             res.json(oResponse);
             return;
           }
           if (qResult[0].password == loginInfo.Password) {
             var token = jwt.sign(loginInfo, "secretkey");
-            oResponse.result="success"
-            oResponse.token=token
+            oResponse.result = "success"
+            oResponse.token = token
             res.json(oResponse);
           } else {
             // res.send(qResult);
-            oResponse.reason="Bad user name or password"
+            oResponse.reason = "Bad user name or password"
             res.json(oResponse);
           }
         }
@@ -56,6 +58,8 @@ exports.verifyUser = (req, res) => {
   }
 };
 
+
+//signup
 exports.signUp = (req, res) => {
   let oResponse = {
     result: "failure",
@@ -72,7 +76,7 @@ exports.signUp = (req, res) => {
     return;
   }
   try {
-    pool.getConnection(function(err, connection) {
+    pool.getConnection(function (err, connection) {
       if (err) {
         oResponse.reason = err;
         res.json(oResponse);
@@ -81,7 +85,7 @@ exports.signUp = (req, res) => {
       connection.query(
         "SELECT * FROM users WHERE user_name=?",
         [signUpInfo.user_name],
-        function(err, qResult) {
+        function (err, qResult) {
           if (err) {
             oResponse.reason = err;
             res.json(oResponse);
