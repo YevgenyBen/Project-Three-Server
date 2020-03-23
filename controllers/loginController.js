@@ -23,6 +23,10 @@ exports.verifyUser = (req, res) => {
   }
   try {
     pool.getConnection(function(err, connection) {
+      if (err){
+        res.json(err);
+        return;
+      }
       // don't forget to check error
       connection.query(
         "SELECT * FROM users WHERE user_name=?",
