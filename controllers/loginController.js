@@ -52,6 +52,7 @@ exports.verifyUser = (req, res) => {
           }
         }
       );
+      connection.release();
     });
   } catch (err) {
     res.json(err);

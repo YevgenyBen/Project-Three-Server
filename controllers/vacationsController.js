@@ -4,12 +4,17 @@ var pool = db.getPool(); // re-uses existing if already created or creates new o
 exports.getAllVacations = (req, res) => {
   try {
     pool.getConnection(function(err, connection) {
+      if (err){
+        res.send("error" + err);
+        return;
+      }
       // don't forget to check error
       connection.query("SELECT * FROM vacations", function(err, result) {
         // don't forget to check error
 
         res.send(result);
       });
+      connection.release();
     });
   } catch (err) {
     res.send("error" + err);
@@ -38,6 +43,7 @@ exports.insertVacation = (req, res) => {
           res.send(result);
         }
       );
+      connection.release();
     });
   } catch (err) {
     res.send("error" + err);
