@@ -10,4 +10,10 @@ router.get("/", usersController.getAllUsers);
 //insert new user
 router.post("/", usersController.insertUser);
 
+//add vacation to favortie 
+router.post("/add", usersController.addToFavorite)
+
+//remove from favorite
+router.post("/delete", usersController.removeFromFavorite)
+
 module.exports = router;

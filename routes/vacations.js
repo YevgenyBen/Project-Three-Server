@@ -5,7 +5,7 @@ var router = express.Router();
 const vacationsController = require("../controllers/vacationsController");
 
 //get all vacations
-router.get("/", tokenVerfier.verifyToken, vacationsController.getAllVacations);
+router.get("/:user", tokenVerfier.verifyToken, vacationsController.getAllVacations);
 
 //insert new vacation
 router.post("/", tokenVerfier.verifyToken, vacationsController.insertVacation);

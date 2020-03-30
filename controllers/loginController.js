@@ -14,7 +14,8 @@ exports.verifyUser = (req, res) => {
     result: "failure",
     reason: "",
     payload: "",
-    token: ""
+    token: "",
+    role: ""
   };
   let loginInfo = req.body.oLoginUser;
   //check if anything send
@@ -44,6 +45,7 @@ exports.verifyUser = (req, res) => {
             var token = jwt.sign(loginInfo, "secretkey");
             oResponse.result = "success"
             oResponse.token = token
+            oResponse.role = qResult[0].role
             res.json(oResponse);
           } else {
             // res.send(qResult);
