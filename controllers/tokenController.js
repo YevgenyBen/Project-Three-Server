@@ -1,9 +1,15 @@
 var jwt = require("jsonwebtoken");
 
 exports.verifyToken = (req, res, next) => {
-  const bearerHeader = req.headers["header"];
+  //postman version
+  // const bearerHeader = req.headers["authorization"]
+  //web version
+  const bearerHeader = req.headers["header"]
   if (typeof bearerHeader !== "undefined") {
     const bearer = bearerHeader.split(" ");
+    //postman version
+    // const bearerToken = bearer[1];
+    //web version
     const bearerToken = bearer[2];
     req.token = bearerToken;
 

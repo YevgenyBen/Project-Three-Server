@@ -7,6 +7,9 @@ const vacationsController = require("../controllers/vacationsController");
 //get all vacations
 router.get("/:user", tokenVerfier.verifyToken, vacationsController.getAllVacations);
 
+//get all favorties for admin
+router.get("/", tokenVerfier.verifyToken, vacationsController.getAllFavoriteVacations);
+
 //insert new vacation
 router.post("/", tokenVerfier.verifyToken, vacationsController.insertVacation);
 

@@ -10,7 +10,6 @@ exports.getAllVacations = (req, res) => {
     role: "",
     favoriteVacations: [],
     allVacations: []
-
   };
 
   try {
@@ -62,7 +61,10 @@ exports.insertVacation = (req, res) => {
   console.log(oVacation);
   try {
     pool.getConnection(function (err, connection) {
-      // don't forget to check error
+      if (err) {
+        res.send("error" + err);
+        return;
+      }
       connection.query(
         "INSERT INTO `vacations`(`content`, `destination`, `picture`, `from_date`, `to_date`, `price`) VALUES (?,?,?,?,?,?)",
         [
@@ -74,7 +76,10 @@ exports.insertVacation = (req, res) => {
           oVacation.price
         ],
         function (err, result) {
-          // don't forget to check error
+          if (err) {
+            res.send("error" + err);
+            return;
+          }
 
           res.send(result);
         }
@@ -85,3 +90,38 @@ exports.insertVacation = (req, res) => {
     res.send("error" + err);
   }
 };
+
+exports.getAllFavoriteVacations = (req, res) => {
+  let oResponse = {
+    result: "failure",
+    reason: "",
+    payload: {},
+    token: "",
+    role: "",
+    AllFavoriteVacations: [],
+  };
+
+  try {
+    pool.getConnection(function (err, connection) {
+      // don't forget to check error
+      connection.query(
+
+        //SELECT v_id,COUNT(*),v.destination FROM user_vacation uv INNER JOIN vacations v ON uv.v_id = v.id GROUP BY v_id
+        "SELECT v_id,COUNT(*) as Favorited,v.destination FROM user_vacation uv INNER JOIN vacations v ON uv.v_id = v.id GROUP BY v_id",
+        [],
+        function (err, result) {
+          if (err) {
+            res.send("error" + err);
+            return;
+          }
+          oResponse.result = "success"
+          oResponse.payload = result
+          res.json(oResponse);
+        }
+      );
+      connection.release();
+    });
+  } catch (err) {
+    res.send("error" + err);
+  }
+}

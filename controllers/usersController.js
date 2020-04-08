@@ -9,11 +9,12 @@ exports.getAllUsers = (req, res) => {
       connection.query("SELECT * FROM users", function (err, result) {
         // don't forget to check error
 
-        res.send(result);
+        res.json(result);
+        connection.release();
       });
-      connection.release();
+
     });
-    connection.release();
+
   } catch (err) {
     res.send("error" + err);
   }
@@ -30,7 +31,11 @@ exports.insertUser = (req, res) => {
   //console.log(oUser);
   try {
     pool.getConnection(function (err, connection) {
-      // don't forget to check error
+      if (err) {
+        oResponse.reason = err;
+        res.send(oResponse);
+        return;
+      }
 
       connection.query(
         "INSERT INTO users (`first_name`, `last_name`, `user_name`, `password`) VALUES (?,?,?,?)",
