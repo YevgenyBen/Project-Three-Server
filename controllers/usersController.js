@@ -156,3 +156,7 @@ exports.addToFavorite = (req, res) => {
 
 
 };
+
+exports.respondAuth = (req, res) => {
+  res.send(req.authData)
+}

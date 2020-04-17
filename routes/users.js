@@ -16,4 +16,7 @@ router.post("/add", usersController.addToFavorite)
 //remove from favorite
 router.post("/delete", usersController.removeFromFavorite)
 
+//verify user for routing
+router.get("/auth", tokenVerfier.verifyToken, usersController.respondAuth)
+
 module.exports = router;

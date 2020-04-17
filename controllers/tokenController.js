@@ -17,6 +17,7 @@ exports.verifyToken = (req, res, next) => {
       if (err) {
         res.status(403).send("Forbidden");
       } else {
+        req.authData = authData
         next();
       }
     });
