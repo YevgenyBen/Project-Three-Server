@@ -50,6 +50,34 @@ function normalizePort(val) {
 }
 
 /**
+ * Socket io
+ */
+
+//Socket
+const socketIo = require("socket.io");
+io = socketIo(server)
+
+io.on('connection', function (socket) {
+	console.log("A user is connected");
+	//Vacation deleted
+	socket.on('vacation deleted', function () {
+		io.emit("vacation deleted");
+	})
+	//vacation modified
+	socket.on("vacation edited", function (status) {
+		io.emit("vacation edited");
+	});
+	//vacation added
+	socket.on("vacation added", function (status) {
+		io.emit("vacation added");
+	});
+
+});
+
+
+
+
+/**
  * Event listener for HTTP server "error" event.
  */
 
@@ -84,3 +112,5 @@ function onListening() {
 	var bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
 	debug('Listening on ' + bind);
 }
+
+

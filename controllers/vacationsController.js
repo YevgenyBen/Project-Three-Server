@@ -1,5 +1,6 @@
 //Database
 var db = require("../util/db/db");
+
 var pool = db.getPool(); // re-uses existing if already created or creates new one
 
 //Fileupload
@@ -14,19 +15,7 @@ var storage = multer.diskStorage({
 })
 var upload = multer({ storage: storage }).single('file')
 
-//Socket
-const http = require("http");
-const socketIo = require("socket.io");
-const axios = require("axios");
-const server = http.createServer(app);
-const io = socketIo(server);
 
-io.on('connection', function (socket) {
-  console.log("A user is connected");
-  socket.on('status added', function (status) {
-    io.emit('refresh feed', status);
-  });
-});
 
 
 
